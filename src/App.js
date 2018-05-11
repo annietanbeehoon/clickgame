@@ -1,19 +1,40 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import MemoryCard from './components/MemoryCard';
+import Wrapper from './components/Wrapper'
+import Introduction from './components/Introduction';
+import memories from './memories.json';
 import './App.css';
 
 class App extends Component {
+  state = {
+    memories: memories
+  }
+
+  removeCard = id => {
+    const newArray = this.state.memories.filter(memory => {
+      return memory.id !== id;
+    });
+
+    this.setState({
+      memories: newArray
+    });
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Wrapper>
+        <Introduction />
+        {this.state.memories.map(memory => {
+            return <MemoryCard
+              key={memory.id}
+              id={memory.id}
+              type={memory.type}
+              image={memory.image}
+              removeCard={this.removeCard}
+              />
+        })}
+        
+      </Wrapper>
     );
   }
 }
